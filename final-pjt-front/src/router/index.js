@@ -20,11 +20,6 @@ const routes = [
     component: BoardView
   },
   {
-    path: '/:id',
-    name: 'DetailView',
-    component: DetailView,
-  },
-  {
     path: '/signup',
     name: 'SignUpView',
     component: SignUpView
@@ -34,7 +29,12 @@ const routes = [
     name: 'LogInView',
     component: LogInView
   },
-
+  {
+    path: '/:id',
+    name: 'DetailView',
+    component: DetailView,
+  },
+  
 ]
 
 const router = new VueRouter({
