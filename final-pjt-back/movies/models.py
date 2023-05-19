@@ -7,6 +7,7 @@ class Genre(models.Model):
 
 class Movie(models.Model):
     # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name = 'like_movies')
     adult = models.BooleanField()
     genre_ids = models.ManyToManyField(Genre, related_name='genre_ids')
     original_language = models.CharField(max_length=10)
@@ -23,6 +24,7 @@ class Movie(models.Model):
 
 class Comment(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comments')
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name = 'like_comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
