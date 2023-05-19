@@ -1,9 +1,6 @@
 <template>
-  <div class="movie-list">
-    <h3>Movie List</h3>
-    <MovieListItem 
-    v-for="movie in movies" :key="movie.id" :movie="movie"
-    />
+  <div class="row row-cols-lg-6 row-cols-md-3 row-cols-1 g-4 mx-2">
+    <MovieListItem v-for="movie in pages" :key="movie.key" :movie="movie" />
   </div>
 </template>
 
@@ -15,6 +12,9 @@ export default {
   components: {
     MovieListItem,
   },
+  props: {
+    pages: Array,
+  },
   computed: {
     movies() {
       return this.$store.state.movies
@@ -23,8 +23,3 @@ export default {
 }
 </script>
 
-<style>
-.movie-list {
-  text-align: start;
-}
-</style>
