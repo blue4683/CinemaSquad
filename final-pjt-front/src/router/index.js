@@ -2,10 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import BoardView from '@/views/BoardView'
+import DetailView from '@/views/DetailView'
 import SignUpView from '@/views/SignUpView'
 import LogInView from '@/views/LogInView'
-
-
 
 Vue.use(VueRouter)
 
@@ -25,13 +24,17 @@ const routes = [
     name: 'SignUpView',
     component: SignUpView
   },
-
   {
     path: '/login',
     name: 'LogInView',
     component: LogInView
   },
-
+  {
+    path: '/:id',
+    name: 'DetailView',
+    component: DetailView,
+  },
+  
 ]
 
 const router = new VueRouter({
