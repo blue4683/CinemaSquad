@@ -2,11 +2,26 @@
   <div id="app">
     <nav>
       <router-link to="/">Home</router-link> |
-      <router-link to="/movies">Movies</router-link>
+      <router-link to="/movies">Movies</router-link> 
+      <router-link to="/login" v-if="isNotLogin"> | Login</router-link> 
+      <router-link to="/signup" v-if="isNotLogin"> | SignUp</router-link>
     </nav>
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    isLogin(){
+      return this.$store.getters.isLogin;
+    },
+    isNotLogin(){
+      return this.$store.getters.isNotLogin; 
+    }
+  }
+}
+</script>
 
 <style>
 #app {

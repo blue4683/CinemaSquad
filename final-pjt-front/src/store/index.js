@@ -17,10 +17,14 @@ export default new Vuex.Store({
     movies: [
     ],
     token: null,
+    username: "",
   },
   getters: {
     isLogin(state) {
       return state.token ? true : false
+    },
+    isNotLogin(state){
+      return state.token ? false : true
     }
   },
   mutations: {
@@ -30,7 +34,10 @@ export default new Vuex.Store({
     // signup & login -> 완료하면 토큰 발급
     SAVE_TOKEN(state, token) {
       state.token = token
-      router.push({name : 'BoardView'}) // store/index.js $router 접근 불가 -> import를 해야함
+      // router.push({name : 'home'}) // store/index.js $router 접근 불가 -> import를 해야함
+    },
+    CHANGE_USERNAME(state, newUsername){
+      state.username = newUsername;
     }
   },
   actions: {
@@ -52,6 +59,11 @@ export default new Vuex.Store({
       const password1 = payload.password1
       const password2 = payload.password2
 
+      if (password1 !== password2) {
+        alert("비밀번호가 일치하지 않습니다.");
+        return;
+      }
+
       axios({
         method: 'post',
         url: `${API_URL}/accounts/signup/`,
@@ -63,9 +75,13 @@ export default new Vuex.Store({
           // console.log(res)
           // context.commit('SIGN_UP', res.data.key)
           context.commit('SAVE_TOKEN', res.data.key)
+          context.commit("CHANGE_USERNAME", username)
+          alert("회원가입 성공")
+          router.push({name : 'home'}) 
         })
         .catch((err) => {
-        console.log(err)
+          alert("회원가입 실패")
+          console.log(err)
       })
     },
     login(context, payload) {
@@ -81,9 +97,30 @@ export default new Vuex.Store({
       })
         .then((res) => {
         context.commit('SAVE_TOKEN', res.data.key)
+        context.commit("CHANGE_USERNAME", username)
+        alert("로그인 성공")  
+        router.push({name : 'home'}) 
         })
-      .catch((err) => console.log(err))
-    }
+      .catch((err) => {
+        alert("로그인 실패")
+        console.log(err)})
+    },
+    logout(context) {
+      return axios
+        .post(
+          `${API_URL}/accounts/logout/`,
+          `Token ${context.state.token}`
+        )
+        .then(() => {
+          context.commit("SAVE_TOKEN", "");
+          context.commit("CHANGE_USERNAME", "")
+          return true;
+        })
+        .catch((error) => {
+          console.error(error);
+          return false;
+        });
+    },
   },
   modules: {
   }

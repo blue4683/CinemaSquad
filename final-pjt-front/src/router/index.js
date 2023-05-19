@@ -2,6 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import BoardView from '@/views/BoardView'
+import SignUpView from '@/views/SignUpView'
+import LogInView from '@/views/LogInView'
+
+
 
 Vue.use(VueRouter)
 
@@ -16,6 +20,18 @@ const routes = [
     name: 'BoardView',
     component: BoardView
   },
+  {
+    path: '/signup',
+    name: 'SignUpView',
+    component: SignUpView
+  },
+
+  {
+    path: '/login',
+    name: 'LogInView',
+    component: LogInView
+  },
+
 ]
 
 const router = new VueRouter({
