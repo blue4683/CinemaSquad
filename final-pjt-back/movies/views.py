@@ -22,7 +22,6 @@ def movie_list(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def comment_list(request):
     comments = get_list_or_404(Comment)
     serializer = CommentListSerializer(comments, many=True)
@@ -62,18 +61,17 @@ def movie_detail(request, movie_pk):
             return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def comment_detail(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
-    if request.method == 'GET':
-        serializer = CommentSerializer(comment)
-        return Response(serializer.data)
-    elif request.method == 'PUT':
+    if request.method == 'PUT':
         if request.user == comment.user:
+            print(request.data)
             serializer = CommentSerializer(comment, data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
+                print(serializer.data)
                 return Response(serializer.data)
         else:
             data = {
@@ -104,3 +102,31 @@ def create_comment(request, movie_pk):
     if serializer.is_valid(raise_exception=True):
         serializer.save(movie=movie, user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def like_comment(request, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    user = request.user
+    if user == comment.user:
+        pass
+    elif comment.like_users.filter(pk=user.pk).exists():
+        comment.like_users.remove(user)
+    else:
+        comment.like_users.add(user)
+
+    serializer = CommentSerializer(comment)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def like_movie(request, movie_pk):
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    user = request.user
+    if movie.like_users.filter(pk=user.pk).exists():
+        movie.like_users.remove(user)
+    else:
+        movie.like_users.add(user)
+
+    serializer = MovieSerializer(movie)
+    return Response(serializer.data)

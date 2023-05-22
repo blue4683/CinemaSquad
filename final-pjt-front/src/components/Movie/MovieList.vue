@@ -16,9 +16,7 @@ export default {
     pages: Array,
   },
   computed: {
-    movies() {
-      return this.$store.state.movies
-    }
+
   }
 }
 </script>

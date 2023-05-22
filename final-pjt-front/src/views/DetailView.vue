@@ -1,48 +1,64 @@
 <template>
-  <div class="d-flex w-75 container justify-content-center">
-    <img v-if="movie" :src="image(movie.poster_path)" class="card-img-top w-25 mx-5" alt="...">
-    <div class="detail-content d-inline-block">
-      <h2>{{ movie?.title }}</h2>
-      <p>내용 : {{ movie?.overview }}</p>
-      <p>개봉일 : {{ movie?.release_date }}</p>
-      <p>평점 : {{ movie?.vote_average }}</p>
+  <div id="detail">
+    <div class="d-flex w-75 container justify-content-center">
+      <img v-if="movie" :src="image(movie.poster_path)" class="card-img-top w-25 mx-5" alt="...">
+      <div class="detail-content d-inline-block">
+        <h2>{{ movie?.title }}</h2>
+        <p>내용 : {{ movie?.overview }}</p>
+        <p>개봉일 : {{ movie?.release_date }}</p>
+        <p>평점 : {{ movie?.vote_average }}</p>
+        <p>관심수 : {{ movie?.like_users.length }}</p>
+        <button @click="likeMovie">좋아요</button>
+      </div>
+    </div>
+    <div class="w-75 container justify-content-center">
+      <CommentForm />
+      <CommentListItem v-for="comment in comments" :key="comment.key" :comment="comment" />
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-const API_URL = 'http://127.0.0.1:8000'
+import CommentForm from '@/components/Comment/CommentForm'
+import CommentListItem from '@/components/Comment/CommentListItem'
+
 const IMG_URL = 'https://image.tmdb.org/t/p/original/'
 
 export default {
   name: 'DetailView',
-  data() {
+  data () {
     return {
       IMG_URL: IMG_URL,
-      movie: null,
+    }
+  },
+  components: {
+    CommentForm,
+    CommentListItem
+  },
+  computed: {
+    comments() {
+      return this.$store.state.comments.filter((comment) => {
+        return comment.movie == this.$route.params.id
+      })
+    },
+    movie() {
+      return this.$store.state.movie
     }
   },
   created() {
     this.getMovieDetail()
+    this.$store.dispatch('getComments')
   },
   methods: {
-    getMovieDetail() {
-      axios({
-        method: 'get',
-        url: `${API_URL}/movies/${ this.$route.params.id }/`,
-      })
-      .then((res) => {
-        console.log(res)
-        this.movie = res.data
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
     image(imgSrc) {
       return `${IMG_URL}${imgSrc}`
     },
+    getMovieDetail() {
+      this.$store.dispatch('getMovieDetail', this.movie.id)
+    },
+    likeMovie() {
+      this.$store.dispatch('likeMovie', this.movie.id)
+    }
   }
 }
 </script>
