@@ -183,6 +183,40 @@ export default new Vuex.Store({
         console.log(err)
       })
     },
+    updateComment(context, data) {
+      axios({
+        method: 'put',
+        url: `${API_URL}/movies/comments/${ data.id }/`,
+        headers: {
+          Authorization: `Token ${ context.state.token }`
+        },
+        data: {
+          content: data.content,
+          user_rate: data.user_rate,
+        }
+      })
+      .then(() => {
+        context.dispatch('getComments')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    deleteComment(context, id) {
+      axios({
+        method: 'delete',
+        url: `${API_URL}/movies/comments/${ id }`,
+        headers: {
+          Authorization: `Token ${ context.state.token }`
+        },
+      })
+      .then(() => {
+        context.dispatch('getComments')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
   },
   modules: {
   }

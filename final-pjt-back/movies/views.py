@@ -67,9 +67,11 @@ def comment_detail(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == 'PUT':
         if request.user == comment.user:
+            print(request.data)
             serializer = CommentSerializer(comment, data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
+                print(serializer.data)
                 return Response(serializer.data)
         else:
             data = {

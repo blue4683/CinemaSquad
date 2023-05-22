@@ -19,10 +19,9 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import CommentForm from '@/components/Comment/CommentForm'
 import CommentListItem from '@/components/Comment/CommentListItem'
-// const API_URL = 'http://127.0.0.1:8000'
+
 const IMG_URL = 'https://image.tmdb.org/t/p/original/'
 
 export default {
@@ -30,7 +29,6 @@ export default {
   data () {
     return {
       IMG_URL: IMG_URL,
-      // movie: null,
     }
   },
   components: {
@@ -52,18 +50,6 @@ export default {
     this.$store.dispatch('getComments')
   },
   methods: {
-    // getMovieDetail() {
-    //   axios({
-    //     method: 'get',
-    //     url: `${API_URL}/movies/${ this.$route.params.id }/`,
-    //   })
-    //   .then((res) => {
-    //     this.movie = res.data
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // },
     image(imgSrc) {
       return `${IMG_URL}${imgSrc}`
     },
