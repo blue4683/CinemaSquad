@@ -46,15 +46,12 @@ export default {
     }
   },
   created() {
-    this.getMovieDetail()
+    this.$store.dispatch('getMovieDetail', this.$route.params.id)
     this.$store.dispatch('getComments')
   },
   methods: {
     image(imgSrc) {
       return `${IMG_URL}${imgSrc}`
-    },
-    getMovieDetail() {
-      this.$store.dispatch('getMovieDetail', this.movie.id)
     },
     likeMovie() {
       this.$store.dispatch('likeMovie', this.movie.id)
