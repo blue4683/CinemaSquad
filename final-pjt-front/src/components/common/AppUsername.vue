@@ -5,11 +5,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
+  name: 'AppUsername',
   computed: {
-    username() {
-      return this.$store.state.username;
-    },
+    ...mapGetters(['username'])
+    // username(){
+    //   return this.$store.state.accounts.username
+    // }
   },
 };
 </script>

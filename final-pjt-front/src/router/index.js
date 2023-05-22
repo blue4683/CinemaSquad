@@ -5,6 +5,7 @@ import BoardView from '@/views/BoardView'
 import DetailView from '@/views/DetailView'
 import SignUpView from '@/views/SignUpView'
 import LogInView from '@/views/LogInView'
+import ProfileView from '../views/ProfileView.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
     path: '/login',
     name: 'LogInView',
     component: LogInView
+  },
+  {
+    path: '/profile/:username',
+    name: 'profile',
+    component: ProfileView
   },
   {
     path: '/:id',
