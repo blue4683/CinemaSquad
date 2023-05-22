@@ -22,7 +22,6 @@ def movie_list(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def comment_list(request):
     comments = get_list_or_404(Comment)
     serializer = CommentListSerializer(comments, many=True)

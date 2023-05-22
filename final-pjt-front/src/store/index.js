@@ -18,6 +18,8 @@ export default new Vuex.Store({
     ],
     token: null,
     username: "",
+    comments: [
+    ],
   },
   getters: {
     isLogin(state) {
@@ -31,6 +33,9 @@ export default new Vuex.Store({
     GET_MOVIES(state, movies) {
       state.movies = movies
     },
+    GET_COMMENTS(state, comments) {
+      state.comments = comments
+    },
     // signup & login -> 완료하면 토큰 발급
     SAVE_TOKEN(state, token) {
       state.token = token
@@ -38,7 +43,7 @@ export default new Vuex.Store({
     },
     CHANGE_USERNAME(state, newUsername){
       state.username = newUsername;
-    }
+    },
   },
   actions: {
     getMovies(context) {
@@ -120,6 +125,18 @@ export default new Vuex.Store({
           console.error(error);
           return false;
         });
+    },
+    getComments(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies/comments`,
+      })
+        .then((res) => {
+          context.commit('GET_COMMENTS', res.data)
+        })
+        .catch((err) => {
+        console.log(err)
+      })
     },
   },
   modules: {
