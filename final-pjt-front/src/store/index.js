@@ -16,8 +16,11 @@ export default new Vuex.Store({
   state: {
     movies: [
     ],
+    movie: null,
     token: null,
     username: "",
+    comments: [
+    ],
   },
   getters: {
     isLogin(state) {
@@ -31,6 +34,12 @@ export default new Vuex.Store({
     GET_MOVIES(state, movies) {
       state.movies = movies
     },
+    GET_MOVIE_DETAIL(state, movie) {
+      state.movie = movie
+    },
+    GET_COMMENTS(state, comments) {
+      state.comments = comments
+    },
     // signup & login -> 완료하면 토큰 발급
     SAVE_TOKEN(state, token) {
       state.token = token
@@ -38,7 +47,7 @@ export default new Vuex.Store({
     },
     CHANGE_USERNAME(state, newUsername){
       state.username = newUsername;
-    }
+    },
   },
   actions: {
     getMovies(context) {
@@ -47,10 +56,36 @@ export default new Vuex.Store({
         url: `${API_URL}/movies/`,
       })
         .then((res) => {
-        // console.log(res, context)
           context.commit('GET_MOVIES', res.data)
         })
         .catch((err) => {
+        console.log(err)
+      })
+    },
+    getMovieDetail(context, id) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies/${ id }/`,
+      })
+      .then((res) => {
+        context.commit('GET_MOVIE_DETAIL', res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    likeMovie(context, id) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies/${ id }/likes`,
+        headers: {
+          Authorization: `Token ${ context.state.token }`
+        },
+      })
+      .then(() => {
+        context.dispatch('getMovieDetail', id)
+      })
+      .catch((err) => {
         console.log(err)
       })
     },
@@ -120,6 +155,67 @@ export default new Vuex.Store({
           console.error(error);
           return false;
         });
+    },
+    getComments(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies/comments`,
+      })
+        .then((res) => {
+          context.commit('GET_COMMENTS', res.data)
+        })
+        .catch((err) => {
+        console.log(err)
+      })
+    },
+    likeComment(context, id) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies/${ id }/comments/likes`,
+        headers: {
+          Authorization: `Token ${ context.state.token }`
+        },
+      })
+      .then(() => {
+        context.dispatch('getComments')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    updateComment(context, data) {
+      axios({
+        method: 'put',
+        url: `${API_URL}/movies/comments/${ data.id }/`,
+        headers: {
+          Authorization: `Token ${ context.state.token }`
+        },
+        data: {
+          content: data.content,
+          user_rate: data.user_rate,
+        }
+      })
+      .then(() => {
+        context.dispatch('getComments')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    deleteComment(context, id) {
+      axios({
+        method: 'delete',
+        url: `${API_URL}/movies/comments/${ id }`,
+        headers: {
+          Authorization: `Token ${ context.state.token }`
+        },
+      })
+      .then(() => {
+        context.dispatch('getComments')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     },
   },
   modules: {
