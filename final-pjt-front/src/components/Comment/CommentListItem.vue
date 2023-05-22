@@ -1,7 +1,8 @@
 <template>
   <div id="comment">
-    <div class="container">
-        <p>{{comment.user.username}} | {{comment.content}} </p>
+    <div class="container d-flex justify-content-center mt-4">
+        <p>{{comment.user.username}} | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p>
+        <button v-if="comment.user.username != this.$store.state.username" @click="likeComment">좋아요</button>
     </div>
   </div>
 </template>
@@ -14,7 +15,9 @@ export default {
       comment: Object,
   },
   methods: {
-
+    likeComment() {
+        this.$store.dispatch('likeComment', this.comment.id)
+    }
   }
 }
 </script>

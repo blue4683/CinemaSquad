@@ -1,6 +1,7 @@
 <template>
-	<div id="comment-form">
+	<div id="comment-form" class="mt-4">
     <form @submit.prevent="createComment">
+      <input type="number" v-model="user_rate">
       <label for="content">내용 : </label>
       <textarea id="content" cols="30" rows="1" v-model="content"></textarea>
       <input type="submit" id="submit">
@@ -16,20 +17,17 @@ export default {
   name: 'CommentListItem',
   data() {
     return {
+      user_rate: 0,
       content: null,
     }
   },
   props: {
 		movie: Object,
   },
-  computed: {
-    isLogin() {
-      return this.$store.getters.isLogin // 로그인 여부
-    }
-  },
   methods: {
     createComment() {
       const content = this.content
+      const user_rate = this.user_rate
 
       axios({
         method: 'post',
@@ -37,10 +35,11 @@ export default {
         headers: {
           Authorization: `Token ${ this.$store.state.token }`
         },
-        data: { content },
+        data: { user_rate, content },
       })
       .then(() => {
         this.$store.dispatch('getComments')
+        this.user_rate = 0
         this.content = null
         alert('댓글 작성 완료')
       })
