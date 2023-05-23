@@ -33,6 +33,7 @@ import AppUsername from "@/components/common/AppUsername.vue";
 
 export default {
   components: { 
+    MovieListItem,
     AppUsername,
   },
   computed: {
