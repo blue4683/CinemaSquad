@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import axios from 'axios'
+import accounts from './modules/accounts'
 import createPersistedState from 'vuex-persistedstate'
-import router from '../router'
+
+import axios from 'axios'
 
 const API_URL = 'http://127.0.0.1:8000'
 
@@ -17,18 +18,10 @@ export default new Vuex.Store({
     movies: [
     ],
     movie: null,
-    token: null,
-    username: "",
     comments: [
     ],
   },
   getters: {
-    isLogin(state) {
-      return state.token ? true : false
-    },
-    isNotLogin(state){
-      return state.token ? false : true
-    }
   },
   mutations: {
     GET_MOVIES(state, movies) {
@@ -39,14 +32,6 @@ export default new Vuex.Store({
     },
     GET_COMMENTS(state, comments) {
       state.comments = comments
-    },
-    // signup & login -> 완료하면 토큰 발급
-    SAVE_TOKEN(state, token) {
-      state.token = token
-      // router.push({name : 'home'}) // store/index.js $router 접근 불가 -> import를 해야함
-    },
-    CHANGE_USERNAME(state, newUsername){
-      state.username = newUsername;
     },
   },
   actions: {
@@ -79,7 +64,7 @@ export default new Vuex.Store({
         method: 'get',
         url: `${API_URL}/movies/${ id }/likes`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${ context.state.accounts.token }`
         },
       })
       .then(() => {
@@ -88,73 +73,6 @@ export default new Vuex.Store({
       .catch((err) => {
         console.log(err)
       })
-    },
-    signUp(context, payload) {
-      const username = payload.username
-      const password1 = payload.password1
-      const password2 = payload.password2
-
-      if (password1 !== password2) {
-        alert("비밀번호가 일치하지 않습니다.");
-        return;
-      }
-
-      axios({
-        method: 'post',
-        url: `${API_URL}/accounts/signup/`,
-        data: {
-          username, password1, password2
-        }
-      })
-        .then((res) => {
-          // console.log(res)
-          // context.commit('SIGN_UP', res.data.key)
-          context.commit('SAVE_TOKEN', res.data.key)
-          context.commit("CHANGE_USERNAME", username)
-          alert("회원가입 성공")
-          router.push({name : 'home'}) 
-        })
-        .catch((err) => {
-          alert("회원가입 실패")
-          console.log(err)
-      })
-    },
-    login(context, payload) {
-      const username = payload.username
-      const password = payload.password
-
-      axios({
-        method: 'post',
-        url: `${API_URL}/accounts/login/`,
-        data: {
-          username, password
-        }
-      })
-        .then((res) => {
-        context.commit('SAVE_TOKEN', res.data.key)
-        context.commit("CHANGE_USERNAME", username)
-        alert("로그인 성공")  
-        router.push({name : 'home'}) 
-        })
-      .catch((err) => {
-        alert("로그인 실패")
-        console.log(err)})
-    },
-    logout(context) {
-      return axios
-        .post(
-          `${API_URL}/accounts/logout/`,
-          `Token ${context.state.token}`
-        )
-        .then(() => {
-          context.commit("SAVE_TOKEN", "");
-          context.commit("CHANGE_USERNAME", "")
-          return true;
-        })
-        .catch((error) => {
-          console.error(error);
-          return false;
-        });
     },
     getComments(context) {
       axios({
@@ -173,7 +91,7 @@ export default new Vuex.Store({
         method: 'get',
         url: `${API_URL}/movies/${ id }/comments/likes`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${ context.state.accounts.token }`
         },
       })
       .then(() => {
@@ -188,7 +106,7 @@ export default new Vuex.Store({
         method: 'put',
         url: `${API_URL}/movies/comments/${ data.id }/`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${ context.state.accounts.token }`
         },
         data: {
           content: data.content,
@@ -207,7 +125,7 @@ export default new Vuex.Store({
         method: 'delete',
         url: `${API_URL}/movies/comments/${ id }`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${ context.state.accounts.token }`
         },
       })
       .then(() => {
@@ -219,5 +137,6 @@ export default new Vuex.Store({
     },
   },
   modules: {
-  }
+    accounts
+  },
 })
