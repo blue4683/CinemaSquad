@@ -3,9 +3,9 @@
     <div>
         <div v-if="!isUpdated" class="container d-flex justify-content-center mt-3">
           <p>{{comment.user.username}} | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p>
-          <button v-if="comment.user.username != this.$store.state.accounts.username" @click="likeComment">좋아요</button>
-          <button v-if="comment.user.username === this.$store.state.accounts.username" @click="updateState">수정</button>
-          <button v-if="comment.user.username === this.$store.state.accounts.username" @click="deleteComment">삭제</button>
+          <button v-if="comment.user.username != currentUser.username" @click="likeComment">좋아요</button>
+          <button v-if="comment.user.username === currentUser.username" @click="updateState">수정</button>
+          <button v-if="comment.user.username === currentUser.username" @click="deleteComment">삭제</button>
         </div>
         <form v-if="isUpdated" @submit.prevent="updateComment">
           <label for="content">수정 내용 : </label>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'CommentListItem',
@@ -28,6 +29,9 @@ export default {
   },
   props: {
       comment: Object,
+  },
+  computed: {
+    ...mapGetters(['currentUser'])
   },
   methods: {
     likeComment() {
