@@ -1,6 +1,6 @@
 <template>
-  <article class="card-group">
-    <div class="card">
+  <article>
+    <div>
       <router-link
       :to="{
         name: 'DetailView',
@@ -8,10 +8,10 @@
       }">
         <img v-if="image(movie.poster_path)" :src="image(movie.poster_path)" class="card-img-top" alt="...">
       </router-link>
-      <div class="card-body">
+      <!-- <div class="card-body">
         <h5 class="card-title">{{ movie.title }}</h5>
         <p class="card-text card-content">{{movie.overview}}</p>
-      </div>
+      </div> -->
     </div>
   </article>
 </template>
@@ -45,4 +45,5 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 </style>

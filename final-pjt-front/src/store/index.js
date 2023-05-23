@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+import _ from 'lodash'
 
 import accounts from './modules/accounts'
 import createPersistedState from 'vuex-persistedstate'
 
-import axios from 'axios'
 
 const API_URL = 'http://127.0.0.1:8000'
+const TMDB_URL = 'https://api.themoviedb.org/3'
+const API_KEY = '616fdab7e7973b6f3cb88fe4b99a8059'
 
 Vue.use(Vuex)
 
@@ -20,8 +23,25 @@ export default new Vuex.Store({
     movie: null,
     comments: [
     ],
+    trendMovies: [
+    ],
+    genres: [
+    ],
+    filteredMovies: [
+    ],
   },
   getters: {
+    popularMovies(state) {
+      const popularMovies = [...state.movies]
+      popularMovies.sort((a, b) => {
+        return b.popularity - a.popularity
+      })
+      return popularMovies.slice(0, 6)
+    },
+    filteredMovies(state) {
+      return state.filteredMovies
+    }
+
   },
   mutations: {
     GET_MOVIES(state, movies) {
@@ -33,6 +53,21 @@ export default new Vuex.Store({
     GET_COMMENTS(state, comments) {
       state.comments = comments
     },
+    GET_TREND_MOVIES(state, movies) {
+      state.trendMovies = movies.slice(0, 6)
+    },
+    GET_GENRES(state, genres) {
+      state.genres = genres
+    },
+    GET_FILTERED_MOVIES(state) {
+      const moviesOrigin = [...state.movies]
+      for (let genre of state.genres) {
+        const filteredMovies = moviesOrigin.filter((movie) => {
+          return movie.genre_ids.includes(genre.id)
+        })
+        state.filteredMovies[genre.id] = _.sampleSize(filteredMovies, 6)
+      }
+    }
   },
   actions: {
     getMovies(context) {
@@ -44,6 +79,23 @@ export default new Vuex.Store({
           context.commit('GET_MOVIES', res.data)
         })
         .catch((err) => {
+        console.log(err)
+      })
+    },
+    getTrendMovies(context) {
+      const time = 'week'
+      axios({
+        method: 'get',
+        url: `${TMDB_URL}/trending/movie/${time}`,
+        params: {
+          api_key: API_KEY,
+          language: 'ko-KR',
+        }
+      })
+      .then((res) => {
+        context.commit('GET_TREND_MOVIES', res.data.results)
+      })
+      .catch((err) => {
         console.log(err)
       })
     },
@@ -73,6 +125,21 @@ export default new Vuex.Store({
       .catch((err) => {
         console.log(err)
       })
+    },
+    getGenres(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies/genres`,
+        headers: {
+          Authorization: `Token ${ context.state.accounts.token }`
+        }
+      })
+      .then((res) => {
+        context.commit('GET_GENRES', res.data)
+      })
+    },
+    getFilteredMovies(context) {
+      context.commit('GET_FILTERED_MOVIES')
     },
     getComments(context) {
       axios({
