@@ -38,7 +38,7 @@ export default {
         method: 'post',
         url: `${API_URL}/movies/${ this.$route.params.id }/comments/`,
         headers: {
-          Authorization: `Token ${ this.$store.state.token }`
+          Authorization: `Token ${ this.$store.state.accounts.token }`
         },
         data: { user_rate, content },
       })
