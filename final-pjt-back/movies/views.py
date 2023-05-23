@@ -23,6 +23,8 @@ def movie_list(request):
 
 @api_view(['GET'])
 def comment_list(request):
+    if not Comment.objects.all():
+        return Response([])
     comments = get_list_or_404(Comment)
     serializer = CommentListSerializer(comments, many=True)
     return Response(serializer.data)

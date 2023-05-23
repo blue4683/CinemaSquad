@@ -64,7 +64,7 @@ export default new Vuex.Store({
         method: 'get',
         url: `${API_URL}/movies/${ id }/likes`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${ context.state.accounts.token }`
         },
       })
       .then(() => {
@@ -91,7 +91,7 @@ export default new Vuex.Store({
         method: 'get',
         url: `${API_URL}/movies/${ id }/comments/likes`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${ context.state.accounts.token }`
         },
       })
       .then(() => {
@@ -106,7 +106,7 @@ export default new Vuex.Store({
         method: 'put',
         url: `${API_URL}/movies/comments/${ data.id }/`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${ context.state.accounts.token }`
         },
         data: {
           content: data.content,
@@ -125,7 +125,7 @@ export default new Vuex.Store({
         method: 'delete',
         url: `${API_URL}/movies/comments/${ id }`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${ context.state.accounts.token }`
         },
       })
       .then(() => {
