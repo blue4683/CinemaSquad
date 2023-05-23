@@ -3,9 +3,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from .serializers.movie import MovieListSerializer, MovieSerializer
 from .serializers.comment import CommentListSerializer, CommentSerializer
+from .serializers.genre import GenreSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .models import Movie, Comment
+from .models import Movie, Comment, Genre
 
 
 @api_view(['GET', 'POST'])
@@ -27,6 +28,12 @@ def comment_list(request):
         return Response([])
     comments = get_list_or_404(Comment)
     serializer = CommentListSerializer(comments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def genre_list(request):
+    genres = get_list_or_404(Genre)
+    serializer = GenreSerializer(genres, many=True)
     return Response(serializer.data)
 
 
