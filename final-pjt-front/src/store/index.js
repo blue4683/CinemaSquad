@@ -130,9 +130,6 @@ export default new Vuex.Store({
       axios({
         method: 'get',
         url: `${API_URL}/movies/genres`,
-        headers: {
-          Authorization: `Token ${ context.state.accounts.token }`
-        }
       })
       .then((res) => {
         context.commit('GET_GENRES', res.data)
