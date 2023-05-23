@@ -1,12 +1,10 @@
 import axios from "axios";
 import router from "@/router";
 import _ from "lodash";
-import createPersistedState from 'vuex-persistedstate'
 
 const API_URL = "http://127.0.0.1:8000";
 
 export default {
-  plugins: [createPersistedState()],
   state: {
     token: null,
     username: "",
