@@ -20,7 +20,9 @@ export default {
         isNotLogin(state){
           return state.token ? false : true
         },
-        currentUser : state => state.currentUser,
+        currentUser(state){ 
+            return state.currentUser? state.currentUser : ''
+        },
         profile : state => state.profile,
         notMyAccount: (state) => {
             return state.profile.username !== state.currentUser.username
