@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Welcome, {{ username }}</h1>
+    <h1>Welcome, {{ currentUser.username }}</h1>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'AppUsername',
   computed: {
-    ...mapGetters(['username'])
+    ...mapGetters(['currentUser'])
     // username(){
     //   return this.$store.state.accounts.username
     // }
