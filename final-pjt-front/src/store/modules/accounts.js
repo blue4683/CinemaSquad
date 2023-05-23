@@ -7,12 +7,12 @@ const API_URL = "http://127.0.0.1:8000";
 export default {
   state: {
     token: null,
-    username: "",
+    // username: "",
     currentUser: {},
     profile: {},
   },
   getters: {
-    username: (state) => state.username,
+    // username: (state) => state.username,
     isLogin(state) {
       return state.token ? true : false;
     },
@@ -34,14 +34,14 @@ export default {
       state.token = token;
       // router.push({name : 'home'}) // store/index.js $router 접근 불가 -> import를 해야함
     },
-    CHANGE_USERNAME(state, username) {
-      state.username = username;
-    },
+    // CHANGE_USERNAME(state, username) {
+    //   state.username = username;
+    // },
     SET_CURRENT_USER: (state, user) => (state.currentUser = user),
     SET_PROFILE: (state, profile) => (state.profile = profile),
   },
   actions: {
-    signUp(context, payload) {
+    signUp({commit, dispatch}, payload) {
       const username = payload.username;
       const password1 = payload.password1;
       const password2 = payload.password2;
@@ -63,8 +63,9 @@ export default {
         .then((res) => {
           // console.log(res)
           // context.commit('SIGN_UP', res.data.key)
-          context.commit("SAVE_TOKEN", res.data.key);
-          context.commit("CHANGE_USERNAME", username);
+          commit("SAVE_TOKEN", res.data.key);
+          dispatch('fetchCurrentUser')
+          // context.commit("CHANGE_USERNAME", username);
           alert("회원가입 성공");
           router.push({ name: "home" });
         })
@@ -73,7 +74,7 @@ export default {
           console.log(err);
         });
     },
-    login(context, payload) {
+    login({commit, dispatch}, payload) {
       const username = payload.username;
       const password = payload.password;
 
@@ -86,8 +87,9 @@ export default {
         },
       })
         .then((res) => {
-          context.commit("SAVE_TOKEN", res.data.key);
-          context.commit("CHANGE_USERNAME", username);
+          commit("SAVE_TOKEN", res.data.key);
+          // context.commit("CHANGE_USERNAME", username);
+          dispatch('fetchCurrentUser')
           alert("로그인 성공");
           router.push({ name: "home" });
         })
@@ -137,5 +139,28 @@ export default {
         commit("SET_PROFILE", res.data);
       });
     },
+    fetchCurrentUser({ commit, getters}) {
+      /*
+      GET: 사용자가 로그인 했다면(토큰이 있다면)
+        currentUserInfo URL로 요청보내기
+          성공하면
+            state.cuurentUser에 저장
+          실패하면(토큰이 잘못되었다면)
+            기존 토큰 삭제
+            LoginView로 이동
+      */
+     if (getters.isLogin) {
+       axios({
+          url: `${API_URL}/accounts/user/`,
+          method: 'get',
+          headers: getters.authHeader,
+        })
+          .then(res => commit('SET_CURRENT_USER', res.data))
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    },
   },
 };
+

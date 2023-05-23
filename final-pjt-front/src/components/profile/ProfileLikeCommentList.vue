@@ -1,24 +1,24 @@
 <template>
   <div class="container">
-    <div id="movie_logo" class="m-5"> 영화들 </div>
+    <div id="movie_logo" class="m-5"> 좋아요한 댓글들 </div>
     <div class="d-flex row">
-      <ProfileMovieItem v-for="movie in likeMovies"
-      :movie="movie"
-      :key="movie.id" />
+      <ProfileLikeCommentItem v-for="comment in likeComments"
+      :comment="comment"
+      :key="comment.id" />
     </div>
   </div>
 </template>
 
 <script>
-import ProfileMovieItem from './ProfileMovieItem.vue'
+import ProfileLikeCommentItem from './ProfileLikeCommentItem.vue'
 
 export default {
-  name: 'ProfileMovieList',
+  name: 'ProfileLikeCommentList',
   components: {
-    ProfileMovieItem,
+    ProfileLikeCommentItem,
   },
   props: {
-    likeMovies: Array,
+    likeComments: Array,
   }
 }
 </script>

@@ -2,7 +2,6 @@
   <div class="home">
     <h1>HOME</h1>
     <AppUsername v-if="isLogin"/>
-    <AppLogout v-if="isLogin"/>
     <div class="container-fluid d-flex col mx-4">
       <div class="col-8 container">
         <div>
@@ -31,13 +30,10 @@
 <script>
 import MovieListItem from '@/components/Movie/MovieListItem'
 import AppUsername from "@/components/common/AppUsername.vue";
-import AppLogout from "@/components/common/AppLogout.vue";
 
 export default {
   components: { 
     AppUsername,
-    AppLogout,
-    MovieListItem,
   },
   computed: {
     isLogin(){
