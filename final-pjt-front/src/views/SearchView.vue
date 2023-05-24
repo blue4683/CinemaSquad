@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <input class="form-control" type="text" v-model="search" placeholder="검색">
-    <button @click="sortedData">검색</button>
+  <div class="container">
+    <input class="form-control" type="text" v-model="search" placeholder="검색어를 입력하세요">
+    <button @click="sortedData" class="btn btn-success">검색</button>
     <div class="d-flex row">
       <SearchMovieItem v-for="movie in listData"
       :movie="movie"
@@ -48,6 +48,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.form-control{
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
 
 </style>
