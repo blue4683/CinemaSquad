@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <div v-if="isLogin">
       <ProfileItem />
       <ProfileMovieList :likeMovies="profile.like_movies" />
@@ -39,4 +39,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+  .app{
+    margin-bottom: 100px;
+  }
+</style>
