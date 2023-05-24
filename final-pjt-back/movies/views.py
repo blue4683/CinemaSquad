@@ -76,7 +76,6 @@ def comment_detail(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == 'PUT':
         if request.user == comment.user:
-            print(request.data)
             serializer = CommentSerializer(comment, data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
@@ -142,8 +141,6 @@ def like_movie(request, movie_pk):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def recommend_movie(request, params):
-    movie_id = params.id
-    count = params.count
-    movies = get_recommend_movies(id=movie_id, count=count)
+def recommend_movie(request, movie_pk, movie_count):
+    movies = get_recommend_movies(id=movie_pk, count=movie_count)
     return Response(movies)

@@ -8,7 +8,7 @@
       <a @click="logout" v-if="isLogin"> Logout</a>
       <router-link :to="{ name : 'profile', params: { username: currentUser.username} }" v-if="isLogin"> 나의 프로필</router-link>
     </nav>
-    <router-view/>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 

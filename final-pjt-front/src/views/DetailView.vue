@@ -15,12 +15,26 @@
       <CommentForm />
       <CommentListItem v-for="comment in comments" :key="comment.key" :comment="comment" />
     </div>
+    <div v-if="isLogin">
+      <h2>이 영화와 비슷한 추천 영화</h2>
+      <div class="row row-cols-lg-5 row-cols-md-5 row-cols-2 g-4 mx-2">
+        <MovieListItem v-for="movie in recommendMovies[0]" :key="movie.id" :movie="movie" />
+      </div>
+      <h2>랜덤 추천 영화</h2>
+      <div class="row row-cols-lg-5 row-cols-md-5 row-cols-2 g-4 mx-2">
+        <MovieListItem v-for="movie in recommendMovies[1]" :key="movie.id" :movie="movie" />
+      </div>
+    </div>
+    <div v-else>
+      <h2>로그인이 필요한 기능입니다.</h2>
+    </div>
   </div>
 </template>
 
 <script>
 import CommentForm from '@/components/Comment/CommentForm'
 import CommentListItem from '@/components/Comment/CommentListItem'
+import MovieListItem from '@/components/Movie/MovieListItem'
 
 const IMG_URL = 'https://image.tmdb.org/t/p/original/'
 
@@ -33,7 +47,8 @@ export default {
   },
   components: {
     CommentForm,
-    CommentListItem
+    CommentListItem,
+    MovieListItem
   },
   computed: {
     comments() {
@@ -43,7 +58,13 @@ export default {
     },
     movie() {
       return this.$store.state.movie
-    }
+    },
+    recommendMovies() {
+      return this.$store.state.recommendMovies
+    },
+    isLogin(){
+      return this.$store.getters.isLogin;
+    },
   },
   created() {
     this.$store.dispatch('getMovieDetail', this.$route.params.id)
@@ -55,8 +76,8 @@ export default {
     },
     likeMovie() {
       this.$store.dispatch('likeMovie', this.movie.id)
-    }
-  }
+    },
+  },
 }
 </script>
 

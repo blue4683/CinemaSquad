@@ -20,8 +20,8 @@ def weighted_vote_average(record):
 
     return ((v/(v+m)) * R) + ((m / (v + m)) * C)
 
-def find_sim_movie(df, sorted_ind, title_name, top_n=10):
-    title_movie = df[df['title'] == title_name]
+def find_sim_movie(df, sorted_ind, movie_id, top_n):
+    title_movie = df[df['movie_id'] == movie_id]
     title_index = title_movie.index.values
 
     similar_indexes = sorted_ind[title_index, : (top_n * 2)]
@@ -29,9 +29,12 @@ def find_sim_movie(df, sorted_ind, title_name, top_n=10):
 
     similar_indexes = similar_indexes[similar_indexes != title_index]
 
-    return df.iloc[similar_indexes].sort_values('weighted_vote', ascending=False)[:top_n]
+    popular_movies = df.iloc[similar_indexes].sort_values('weighted_vote', ascending=False)[:int(top_n*0.5)]
+    random_movies = df.sample(n=int(top_n*0.5))
 
-JSON_PATH = 'final-pjt-back/movies/fixtures'
+    return [popular_movies, random_movies]
+
+JSON_PATH = 'movies/fixtures'
 with open(JSON_PATH+'/genres.json', 'rt', encoding = 'UTF8') as f:
     genres = json.load(f)
 
@@ -49,8 +52,5 @@ m = movies_df['vote_count'].quantile(0.6)
 
 movies_df['weighted_vote'] = movies_df.apply(weighted_vote_average, axis=1)
 
-similar_movies = find_sim_movie(movies_df, genre_sim_sorted_ind, '슈퍼 마리오 브라더스', 10)
-
 def get_recommend_movies(id, df=movies_df, index=genre_sim_sorted_ind, count=10):
-    title = df['id'==id]['title']
-    return find_sim_movie(df, index, title, count)
+    return find_sim_movie(df, index, id, count)
