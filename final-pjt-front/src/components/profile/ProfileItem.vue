@@ -13,6 +13,19 @@
       <span>{{ likeCount }} movie &nbsp;</span>
       <span>{{ followersCount }} followers &nbsp;</span>
       <span>{{ followingsCount }} followings</span>
+      <div class="black-bg" v-if="openModal == true" @click="close($event)">
+        <div class="white-bg">
+            <h4>팔로우/팔로잉 목록</h4>
+            <p>팔로우 목록</p>
+            <span v-for="followers in profile.followers" :key="followers"><a :href="`http://localhost:8080/profile/${ Users[followers-1].username }`">{{Users[followers-1].username}}</a></span>
+            <p>팔로잉 목록</p>
+            <span v-for="following in profile.followings" :key="following"><a :href="`http://localhost:8080/profile/${ Users[following-1].username }`">{{Users[following-1].username}}</a><br></span>
+            <button class="close">닫기</button>
+        </div>
+      </div>
+      <h5 @click="openModal = true">팔로우/팔로잉 목록</h5>
+      
+
     </div>
   </div>
 </template>
@@ -32,21 +45,34 @@ export default {
       followingsCount() {
         return this.profile.followings?.length
       },
+      Users(){
+        return this.$store.state.users
+      }
     },
     
   data() {
     return {
       username: this.$route.params.username,
+      openModal: false,
     }
   },
   methods: {
     ...mapActions(['fetchProfile', 'followProfile', 'updateImg']),
-
+    getUsers() {
+      this.$store.dispatch('getUsers')
+    },
+		close(event){
+			if(event.target.classList.contains('black-bg') || event.target.classList.contains('close')){
+				this.openModal = false;
+			} else if (event.target.classList.contains('white-bg')){
+				this.openModal = true;
+			}
+		}
   },
   created() {
     const payload = { username: this.$route.params.username }
     this.fetchProfile(payload)
-
+    this.getUsers()
   },
   mounted() {
     document.querySelectorAll('.heart, .heart-button').forEach(button => button.addEventListener('click', () => button.classList.toggle('active')));
@@ -228,4 +254,38 @@ export default {
     margin-left: 20px;
     margin-top: 15px;
   }
+
+  .black-bg {
+	width: 100%; 
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	position: fixed;
+  z-index: 10;
+}
+
+.white-bg {
+	width: 90%;
+	margin: 80px auto;
+	background: white;
+	border-radius: 5px;
+	padding: 20px 0;
+  z-index: 10;
+}
+
+.close {
+	cursor: pointer;
+	border: none;
+	background: #6667AB;
+	color: white;
+	font-weight: bold;
+	border-radius: 5px;
+	padding: 5px 15px;
+}
+
+.close:hover {
+	color:white;
+	font-weight: bold;
+	transform: scale(1.1);
+	transition: all 0.5s;
+}
 </style>

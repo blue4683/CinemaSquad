@@ -33,3 +33,10 @@ def user_profile(request, username):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
+
+@api_view(['GET'])
+def users(request):
+    user = get_list_or_404(get_user_model())
+    if request.method == 'GET':
+        serializer = UserSerializer(user, many=True)
+        return Response(serializer.data)

@@ -29,6 +29,8 @@ export default new Vuex.Store({
     ],
     filteredMovies: [
     ],
+    users: [
+    ],
   },
   getters: {
     popularMovies(state) {
@@ -67,6 +69,9 @@ export default new Vuex.Store({
         })
         state.filteredMovies[genre.id] = _.sampleSize(filteredMovies, 6)
       }
+    },
+    GET_USERS(state, users){
+      state.users = users
     }
   },
   actions: {
@@ -196,6 +201,18 @@ export default new Vuex.Store({
         context.dispatch('getComments')
       })
       .catch((err) => {
+        console.log(err)
+      })
+    },
+    getUsers(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/accounts/users/`,
+      })
+        .then((res) => {
+          context.commit('GET_USERS', res.data)
+        })
+        .catch((err) => {
         console.log(err)
       })
     },

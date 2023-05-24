@@ -104,7 +104,7 @@ export default {
         .then(() => {
           context.commit("SAVE_TOKEN", "");
           context.commit("CHANGE_USERNAME","");
-          router.push({ name: 'LogInView' })
+          router.push({ name: 'home' })
           return true;
         })
         .catch((error) => {
