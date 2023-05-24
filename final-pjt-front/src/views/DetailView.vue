@@ -7,8 +7,10 @@
         <p>내용 : {{ movie?.overview }}</p>
         <p>개봉일 : {{ movie?.release_date }}</p>
         <p>평점 : {{ movie?.vote_average }}</p>
+        <p>장르 : {{movie_genres}}</p>
         <p>관심수 : {{ movie?.like_users.length }}</p>
-        <button @click="likeMovie">좋아요</button>
+        <button @click="likeMovie" v-if="currentUser.pk in movie.like_users">좋아요 취소</button>
+        <button @click="likeMovie" v-else>좋아요</button>
       </div>
     </div>
     <div class="w-75 container justify-content-center">
@@ -35,6 +37,7 @@
 import CommentForm from '@/components/Comment/CommentForm'
 import CommentListItem from '@/components/Comment/CommentListItem'
 import MovieListItem from '@/components/Movie/MovieListItem'
+import {mapGetters} from 'vuex'
 
 const IMG_URL = 'https://image.tmdb.org/t/p/original/'
 
@@ -65,10 +68,25 @@ export default {
     isLogin(){
       return this.$store.getters.isLogin;
     },
+    movie_genres() {
+      const movie_genres = this.$store.state.movie.genre_ids
+      const arr = []
+      for (const genre of this.$store.state.genres) {
+          if (movie_genres.includes(genre.id)) {
+            arr.push(genre.name)
+          }
+      }
+      return arr.join(', ')
+    },
+    genres() {
+      return this.$store.state.genres
+    },
+    ...mapGetters(['currentUser'])
   },
   created() {
     this.$store.dispatch('getMovieDetail', this.$route.params.id)
     this.$store.dispatch('getComments')
+    this.$store.dispatch('getGenres')
   },
   methods: {
     image(imgSrc) {
