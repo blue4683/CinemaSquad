@@ -7,7 +7,7 @@ from .serializers.genre import GenreSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Movie, Comment, Genre
-
+from .modules.recommend_movies import get_recommend_movies
 
 @api_view(['GET', 'POST'])
 def movie_list(request):
@@ -139,3 +139,11 @@ def like_movie(request, movie_pk):
 
     serializer = MovieSerializer(movie)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recommend_movie(request, params):
+    movie_id = params.id
+    count = params.count
+    movies = get_recommend_movies(id=movie_id, count=count)
+    return Response(movies)

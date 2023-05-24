@@ -1,6 +1,10 @@
 <template>
   <div>
     <h1>Movie Page</h1>
+    <select v-model="selection" @change="selectGenre(selection)">
+        <option value="total" selected="selected">전체</option>
+        <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}</option>
+    </select>
     <MovieList :pages="paginatedData"/>
     <hr>
     <div class="btn-cover">
@@ -22,7 +26,8 @@ export default {
   name: 'BoardView',
   data () {
     return {
-      pageNum: 0
+      pageNum: 0,
+      selection: 'total',
     }
   },
   props: {
@@ -39,32 +44,45 @@ export default {
     isLogin() {
       return this.$store.getters.isLogin // 로그인 여부
     },
+    genres() {
+      return this.$store.state.genres
+    },
     pageCount () {
-      let listLeng = this.$store.state.movies.length,
+      let listLeng = this.$store.state.selectMovies.length,
           listSize = this.pageSize,
           page = Math.floor(listLeng / listSize);
       if (listLeng % listSize > 0) page += 1;
       return page
     },
     paginatedData () {
+      const movies = this.$store.state.selectMovies
       const start = this.pageNum * this.pageSize,
             end = start + this.pageSize;
-      return this.$store.state.movies.slice(start, end);
-    }
+      return movies.slice(start, end);
+    },
   },
   created() {
     this.getMovies()
+    this.getGenres()
+    this.selectGenre(this.selection)
   },
   methods: {
     getMovies() {
       this.$store.dispatch('getMovies')
+    },
+    getGenres() {
+      this.$store.dispatch('getGenres')
     },
     nextPage () {
       this.pageNum += 1;
     },
     prevPage () {
       this.pageNum -= 1;
-    }
+    },
+    selectGenre(selection) {
+      this.$store.dispatch('selectGenre', selection)
+      this.pageNum = 0
+    },
   }
 }
 </script>

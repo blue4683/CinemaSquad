@@ -29,6 +29,8 @@ export default new Vuex.Store({
     ],
     filteredMovies: [
     ],
+    selectMovies: [
+    ],
   },
   getters: {
     popularMovies(state) {
@@ -67,6 +69,16 @@ export default new Vuex.Store({
         })
         state.filteredMovies[genre.id] = _.sampleSize(filteredMovies, 6)
       }
+    },
+    SELECT_GENRE(state, selection) {
+      if (selection === 'total') {
+        state.selectMovies = state.movies
+        return
+      }
+      const selectMovies = state.movies.filter((movie) => {
+        return movie.genre_ids.includes(selection)
+      })
+      state.selectMovies = selectMovies
     }
   },
   actions: {
@@ -198,6 +210,9 @@ export default new Vuex.Store({
       .catch((err) => {
         console.log(err)
       })
+    },
+    selectGenre(context, selection) {
+      context.commit('SELECT_GENRE', selection)
     },
   },
   modules: {
