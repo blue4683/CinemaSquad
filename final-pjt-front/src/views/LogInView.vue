@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>LogIn Page</h1>
-    <form @submit.prevent="login">
+    <form @submit.prevent="loginUser">
       <label for="username">username : </label>
       <input type="text" id="username" v-model="username"><br>
 
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 
 export default {
   name: 'LogInView',
@@ -24,7 +25,8 @@ export default {
     }
   },
   methods: {
-    login() {
+    ...mapActions(['login']),
+    loginUser() {
       const username = this.username
       const password = this.password
 
@@ -32,7 +34,7 @@ export default {
         username, password
       }
 
-      this.$store.dispatch('login', payload)
+      this.login(payload)
 
     }
   }
