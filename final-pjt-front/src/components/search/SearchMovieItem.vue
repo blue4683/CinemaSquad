@@ -20,7 +20,7 @@
 <script>
 
 export default {
-  name: 'ProfileMovieItem',
+  name: 'SearchMovieItem',
   props: {
     movie: Object,
   },
@@ -147,17 +147,17 @@ export default {
 }
 /* .containers:hover .overlay .head {
   transform: translateY(0px);
-} */
-/* .containers:hover .overlay hr {
+}
+.containers:hover .overlay hr {
   width: 75px;
   transition-delay: 0.4s;
-} */
-/* .containers:hover .overlay .price {
+}
+.containers:hover .overlay .price {
   transform: translateY(0px);
   transition-delay: 0.3s;
   opacity: 1;
-} */
-/* .containers:hover .overlay .cart {
+}
+.containers:hover .overlay .cart {
   transform: translateY(0px);
   transition-delay: 0.6s;
   opacity: 1;

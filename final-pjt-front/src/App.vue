@@ -2,7 +2,8 @@
   <div id="app">
     <nav>
       <router-link to="/">Home</router-link> |
-      <router-link to="/movies">Movies</router-link>
+      <router-link to="/movies">Movies</router-link> |
+      <router-link to="/search">Search</router-link>
       <router-link to="/login" v-if="isNotLogin"> | Login</router-link>
       <router-link to="/signup" v-if="isNotLogin"> | SignUp</router-link>
       <a @click="logout" v-if="isLogin"> Logout</a>

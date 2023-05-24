@@ -7,6 +7,14 @@ import DetailView from '@/views/DetailView'
 import SignUpView from '@/views/SignUpView'
 import LogInView from '@/views/LogInView'
 import ProfileView from '../views/ProfileView.vue'
+import SearchView from '../views/SearchView.vue'
+
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(() => {
+        return window.location.reload()
+    })
+};
 
 Vue.use(VueRouter)
 
@@ -37,6 +45,11 @@ const routes = [
     component: LogInView
   },
   {
+    path: '/search',
+    name: 'SearchView',
+    component: SearchView
+  },
+  {
     path: '/profile/:username',
     name: 'profile',
     component: ProfileView,
@@ -58,3 +71,16 @@ const router = new VueRouter({
 
 
 export default router
+
+// router.beforeEach((to, from, next) => {
+//   const isLogin = true
+//   const authPages = ['profile']
+//   const isAuthRequired = authPages.includes(to.name)
+//   if (isAuthRequired && !isLogin){
+//     console.log('Login으로 이동!')
+//     next({name: 'LoginView'})
+//   } else {
+//     console.log('to로 이동')
+//     next()
+//   }
+// })

@@ -33,6 +33,8 @@ export default new Vuex.Store({
     ],
     recommendMovies: [
     ],
+    users: [
+    ],
   },
   getters: {
     popularMovies(state) {
@@ -91,6 +93,9 @@ export default new Vuex.Store({
         return movie.genre_ids.includes(selection)
       })
       state.selectMovies = selectMovies
+    },
+    GET_USERS(state, users){
+      state.users = users
     }
   },
   actions: {
@@ -245,6 +250,18 @@ export default new Vuex.Store({
     },
     selectGenre(context, selection) {
       context.commit('SELECT_GENRE', selection)
+    },
+    getUsers(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/accounts/users/`,
+      })
+        .then((res) => {
+          context.commit('GET_USERS', res.data)
+        })
+        .catch((err) => {
+        console.log(err)
+      })
     },
   },
   modules: {

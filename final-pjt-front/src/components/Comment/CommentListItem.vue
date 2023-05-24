@@ -2,7 +2,8 @@
   <div id="comment">
     <div>
         <div v-if="!isUpdated" class="container d-flex justify-content-center mt-3">
-          <p>{{comment.user.username}} | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p>
+          <p v-show="isLogin"><a :href="`http://localhost:8080/profile/${ comment.user.username }`">{{comment.user.username}}</a> | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p>
+          <p v-show="!isLogin"><a :href="`http://localhost:8080/login`">{{comment.user.username}}</a> | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p>
           <button v-if="comment.user.username != currentUser.username" @click="likeComment">좋아요</button>
           <button v-if="comment.user.username === currentUser.username" @click="updateState">수정</button>
           <button v-if="comment.user.username === currentUser.username" @click="deleteComment">삭제</button>
@@ -31,7 +32,7 @@ export default {
       comment: Object,
   },
   computed: {
-    ...mapGetters(['currentUser'])
+    ...mapGetters(['currentUser', 'isLogin'])
   },
   methods: {
     likeComment() {

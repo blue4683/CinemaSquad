@@ -35,9 +35,9 @@ export default {
       console.log(state.token)
       // router.push({name : 'home'}) // store/index.js $router 접근 불가 -> import를 해야함
     },
-    // CHANGE_USERNAME(state, username) {
-    //   state.username = username;
-    // },
+    CHANGE_USERNAME(state, username) {
+      state.username = username;
+    },
     SET_CURRENT_USER: (state, user) => (state.currentUser = user),
     SET_PROFILE: (state, profile) => (state.profile = profile),
   },
@@ -105,6 +105,8 @@ export default {
         .post(`${API_URL}/accounts/logout/`, `Token ${context.state.token}`)
         .then(() => {
           context.commit("SAVE_TOKEN", "");
+          context.commit("CHANGE_USERNAME","");
+          router.push({ name: 'home' })
           return true;
         })
         .catch((error) => {
