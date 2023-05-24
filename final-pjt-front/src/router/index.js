@@ -71,16 +71,3 @@ const router = new VueRouter({
 
 
 export default router
-
-// router.beforeEach((to, from, next) => {
-//   const isLogin = true
-//   const authPages = ['profile']
-//   const isAuthRequired = authPages.includes(to.name)
-//   if (isAuthRequired && !isLogin){
-//     console.log('Login으로 이동!')
-//     next({name: 'LoginView'})
-//   } else {
-//     console.log('to로 이동')
-//     next()
-//   }
-// })

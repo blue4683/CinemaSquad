@@ -93,7 +93,7 @@ export default {
 }
 
 .items {
-  padding-left: 20px;
+  /* padding-left: 20px; */
   letter-spacing: 3px;
 }
 

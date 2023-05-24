@@ -1,24 +1,35 @@
 <template>
-  <div id="comment">
-    <div>
-        <div v-if="!isUpdated" class="container d-flex justify-content-center mt-3">
-          <!-- <p v-show="isLogin"><a :href="`http://localhost:8080/profile/${ comment.user.username }`">{{comment.user.username}}</a> | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p>
-          <p v-show="!isLogin"><a :href="`http://localhost:8080/login`">{{comment.user.username}}</a> | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p> -->
-          <p v-show="isLogin"><router-link :to="{ name: 'profile', params: {username: comment.user.username }}">{{comment.user.username}}</router-link> | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p>
-          <p v-show="!isLogin"><router-link :to="{name: 'LogInView'}">{{comment.user.username}}</router-link> | {{comment.user_rate}} | {{comment.content}} | {{comment.like_users.length}} </p>
-          <button v-if="comment.user.username != currentUser.username" @click="likeComment" id="follow" class="heart-button" :class="{active:comment.like_users.includes(currentUser.pk)}">
-            <div class="heart-flip"></div>
+  <div id="comment" class="col-3 mx-3 rounded-3" style="background-color: gainsboro;">
+        <div v-if="!isUpdated" class="container mt-3">
+          <div v-show="isLogin" class=" d-flex justify-content-between mx-2 container">
+            <p v-show="isLogin"><router-link :to="{ name: 'profile', params: {username: comment.user.username }}">{{comment.user.username}}</router-link></p>
+            <p v-show="!isLogin"><router-link :to="{ name: 'LogInView', params: {username: comment.user.username }}">{{comment.user.username}}</router-link></p>
+            <p><span style="color: #ffc107;">&bigstar;</span>  {{comment.user_rate}}</p>
+          </div>
+          <hr>
+          <div class="container">
+            <p>{{ comment.content }}</p>
+          </div>
+          <hr>
+          <div class="container d-flex justify-content-between mb-2">
+            <p class="my-auto">{{comment.like_users.length}}</p>
+            <button v-if="comment.user.username != currentUser.username" @click="likeComment" id="follow" class="heart-button" :class="{active:comment.like_users.includes(currentUser.pk)}">
+            <div class="heart-flip my-auto"></div>
             <span>Like<span>d</span></span>
           </button>
-          <button v-if="comment.user.username === currentUser.username" @click="updateState" class="btn btn-success">수정</button>
-          <button v-if="comment.user.username === currentUser.username" @click="deleteComment" class="btn btn-warning">삭제</button>
+          </div>
+          <!-- <button v-if="comment.user.username != currentUser.username" @click="likeComment" id="follow" class="heart-button" :class="{active:comment.like_users.includes(currentUser.pk)}">
+            <div class="heart-flip"></div>
+            <span>Like<span>d</span></span>
+          </button> -->
+          <!-- <button v-if="comment.user.username === currentUser.username" @click="updateState" class="btn btn-success">수정</button>
+          <button v-if="comment.user.username === currentUser.username" @click="deleteComment" class="btn btn-warning">삭제</button> -->
         </div>
         <form v-if="isUpdated" @submit.prevent="updateComment">
           <label for="content">수정 내용 : </label>
           <textarea id="content" cols="30" rows="1" v-model="content"></textarea>
           <input type="submit" id="submit" value="수정">
         </form>
-    </div>
   </div>
 </template>
 
@@ -41,7 +52,12 @@ export default {
   },
   methods: {
     likeComment() {
-      this.$store.dispatch('likeComment', this.comment.id)
+      if (this.isLogin) {
+        this.$store.dispatch('likeComment', this.comment.id)
+      }
+      else {
+        this.$router.push({name:'LogInView'})
+      }
     },
     updateComment() {
       if (!this.content) {
