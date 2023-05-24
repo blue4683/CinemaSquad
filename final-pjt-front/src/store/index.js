@@ -29,6 +29,10 @@ export default new Vuex.Store({
     ],
     filteredMovies: [
     ],
+    selectMovies: [
+    ],
+    recommendMovies: [
+    ],
   },
   getters: {
     popularMovies(state) {
@@ -67,6 +71,26 @@ export default new Vuex.Store({
         })
         state.filteredMovies[genre.id] = _.sampleSize(filteredMovies, 6)
       }
+    },
+    GET_RECOMMEND_MOVIES(state, movie_list) {
+      const recommendMovies = []
+      for (const movies of movie_list) {
+        const filteredMovies = state.movies.filter((movie) => {
+          return movies.movie_id.includes(movie.movie_id)
+        })
+        recommendMovies.push(filteredMovies)
+      }
+      state.recommendMovies = recommendMovies
+    },
+    SELECT_GENRE(state, selection) {
+      if (selection === 'total') {
+        state.selectMovies = state.movies
+        return
+      }
+      const selectMovies = state.movies.filter((movie) => {
+        return movie.genre_ids.includes(selection)
+      })
+      state.selectMovies = selectMovies
     }
   },
   actions: {
@@ -106,6 +130,9 @@ export default new Vuex.Store({
       })
       .then((res) => {
         context.commit('GET_MOVIE_DETAIL', res.data)
+        if (context.getters.isLogin) {
+          context.dispatch('getRecommendMovies')
+        }
       })
       .catch((err) => {
         console.log(err)
@@ -124,6 +151,23 @@ export default new Vuex.Store({
       })
       .catch((err) => {
         console.log(err)
+      })
+    },
+    getRecommendMovies(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/movies/recommend/${this.state.movie.movie_id}/10`,
+        headers: {
+          Authorization: `Token ${ context.state.accounts.token }`
+        },
+      })
+      .then((res) => {
+        context.commit('GET_RECOMMEND_MOVIES', res.data)
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          return
+        }
       })
     },
     getGenres(context) {
@@ -198,6 +242,9 @@ export default new Vuex.Store({
       .catch((err) => {
         console.log(err)
       })
+    },
+    selectGenre(context, selection) {
+      context.commit('SELECT_GENRE', selection)
     },
   },
   modules: {

@@ -39,7 +39,7 @@ const routes = [
   {
     path: '/profile/:username',
     name: 'profile',
-    component: ProfileView
+    component: ProfileView,
   },
   {
     path: '/:id',
@@ -54,5 +54,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
 
 export default router
