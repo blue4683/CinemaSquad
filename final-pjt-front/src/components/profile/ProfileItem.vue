@@ -1,46 +1,41 @@
 <template>
   <div>
-  <div class="d-flex flex-column">
-  <div style="font-size: 30px">
-    <div v-if="currentUser.username == profile.username" style="margin:0;">어서와요!</div>
-    <div>{{ profile.username }}<span v-if="currentUser.username == profile.username" style="margin:0; font-size:30px"></span><span v-else style="margin:0; font-size:30px">의</span></div>
-    <!-- <div class="d-flex align-items-center"> -->
-      <div v-if="currentUser.username != profile.username" style="margin:0; font-size:30px; font-weight: 500">프로필</div>
-        <button v-if="currentUser.username != profile.username" id="follow" @click="followProfile(username)" class="heart-button" :class="{active : isFollowing}">
-          <div class="heart-flip"></div>
-          <span>follow<span>ed</span></span>
-        </button>
-    <!-- </div> -->
+    <div>
+      <div class="container profile d-inline-block py-auto ms-3">
+        <div class="d-flex mb-3">
+          <h1 class="my-auto fw-bold">{{ profile.username.toUpperCase() }}</h1>
+          <button v-if="currentUser.username != profile.username" id="follow" @click="followProfile(username)" class="heart-button" :class="{active : isFollowing}">
+            <div class="heart-flip me-2"></div>
+            <span>follow<span>ed</span></span>
+          </button>
+        </div>
+          <p class="fw-bold fs-4">followers {{ followersCount }}</p>
+          <p class="fw-bold fs-4">followings {{ followingsCount }}</p>
+          <button class="btn btn-success mb-1" @click="openModal = true">팔로우/팔로잉 목록</button>
+      </div>
     </div>
     <div>
-      <span>{{ likeCount }} movie &nbsp;</span>
-      <span>{{ followersCount }} followers &nbsp;</span>
-      <span>{{ followingsCount }} followings</span>
       <div class="black-bg" v-if="openModal == true" @click="close($event)">
         <div class="white-bg">
             <h4>팔로우/팔로잉 목록</h4>
           <div class="container">
             <div class="column">
-            <p>팔로우 목록</p>
-            <!-- <span v-for="followers in profile.followers" :key="followers"><a :href="`http://localhost:8080/profile/${ Users[followers-1].username }`">{{Users[followers-1].username}}</a></span> -->
-            <span v-for="followers in profile.followers" :key="followers"><router-link :to="{ name: 'profile', params: {username: Users[followers-1].username }}">{{Users[followers-1].username}}<br></router-link></span>
+              <p>팔로우 목록</p>
+              <!-- <span v-for="followers in profile.followers" :key="followers"><a :href="`http://localhost:8080/profile/${ Users[followers-1].username }`">{{Users[followers-1].username}}</a></span> -->
+              <span v-for="followers in profile.followers" :key="followers"><router-link :to="{ name: 'profile', params: {username: Users[followers-1].username }}">{{Users[followers-1].username}}<br></router-link></span>
             </div>
             <div class="column">
-            <p>팔로잉 목록</p>
-            <!-- <span v-for="following in profile.followings" :key="following"><a :href="`http://localhost:8080/profile/${ Users[following-1].username }`">{{Users[following-1].username}}</a><br></span> -->
-            <span v-for="following in profile.followings" :key="following"><router-link :to="{ name: 'profile', params: {username: Users[following-1].username }}">{{Users[following-1].username}}<br></router-link></span>
+              <p>팔로잉 목록</p>
+              <!-- <span v-for="following in profile.followings" :key="following"><a :href="`http://localhost:8080/profile/${ Users[following-1].username }`">{{Users[following-1].username}}</a><br></span> -->
+              <span v-for="following in profile.followings" :key="following"><router-link :to="{ name: 'profile', params: {username: Users[following-1].username }}">{{Users[following-1].username}}<br></router-link></span>
             </div>
           </div>
-            <button class="close">닫기</button>
+          <button class="close">닫기</button>
         </div>
       </div>
       <br>
-      <button class="btn btn-success" @click="openModal = true">팔로우/팔로잉 목록</button>
-      
-
     </div>
   </div>  
-  </div>
 </template>
 
 <script>
@@ -61,8 +56,7 @@ export default {
       Users(){
         return this.$store.state.users
       }
-    },
-    
+    },   
   data() {
     return {
       username: this.$route.params.username,
@@ -100,6 +94,10 @@ export default {
     font-weight: 500;
   }
 
+.profile {
+  text-align: start;
+}
+
   .container {
   display: flex;
 }
@@ -108,8 +106,6 @@ export default {
   flex-basis: 50%;
   padding: 20px;
 }
-
-
   span {
     font-family: 'Noto Sans KR',  sans-serif;
     font-weight: 700;

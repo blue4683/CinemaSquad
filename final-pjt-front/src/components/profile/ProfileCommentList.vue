@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <div id="movie_logo" class="m-5"> 댓글들 </div>
-    <div class="d-flex row">
+  <div>
+    <h2 class="my-5 fw-bold">댓글</h2>
+    <div class="comment-container my-4">
       <ProfileCommentItem v-for="comment in CommentSet"
       :comment="comment"
       :key="comment.id" />
@@ -24,7 +24,13 @@ export default {
 </script>
 
 <style>
-
+.comment-container {
+  margin-left:15%;
+  margin-right:15%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 40px;
+}
   #movie_logo {
     font-family: 'Noto Sans KR',  sans-serif;
     font-weight: 700;

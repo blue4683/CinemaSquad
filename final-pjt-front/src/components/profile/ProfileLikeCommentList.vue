@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <div id="movie_logo" class="m-5"> 좋아요한 댓글들 </div>
-    <div class="d-flex row">
+  <div>
+    <h2 class="my-5 fw-bold">좋아요한 댓글</h2>
+    <div class="comment-container my-4">
       <ProfileLikeCommentItem v-for="comment in likeComments"
       :comment="comment"
       :key="comment.id" />

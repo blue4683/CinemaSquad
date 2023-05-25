@@ -104,7 +104,7 @@ export default {
         .post(`${API_URL}/accounts/logout/`, `Token ${context.state.token}`)
         .then(() => {
           context.commit("SAVE_TOKEN", "");
-          context.commit("CHANGE_USERNAME","");
+          context.commit("SET_CURRENT_USER","");
           router.push({ name: 'home' })
           return true;
         })
