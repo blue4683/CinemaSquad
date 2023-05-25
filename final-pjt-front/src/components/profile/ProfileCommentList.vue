@@ -40,4 +40,8 @@ export default {
   position: absolute;
   margin-left: 3px;
   }
+
+  a{
+    text-decoration: none;
+  }
 </style>

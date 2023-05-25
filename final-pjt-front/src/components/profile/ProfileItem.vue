@@ -1,13 +1,16 @@
 <template>
   <div>
+  <div class="d-flex flex-column">
+  <div style="font-size: 30px">
     <div v-if="currentUser.username == profile.username" style="margin:0;">어서와요!</div>
-    <div>{{ profile.username }}<span v-if="currentUser.username == profile.username" style="margin:0; font-size:50px"></span><span v-else style="margin:0; font-size:50px">의</span></div>
-    <div class="d-flex align-items-center">
-      <div v-if="currentUser.username != profile.username" style="margin:0; font-size:50px; font-weight: 500">프로필</div>
+    <div>{{ profile.username }}<span v-if="currentUser.username == profile.username" style="margin:0; font-size:30px"></span><span v-else style="margin:0; font-size:30px">의</span></div>
+    <!-- <div class="d-flex align-items-center"> -->
+      <div v-if="currentUser.username != profile.username" style="margin:0; font-size:30px; font-weight: 500">프로필</div>
         <button v-if="currentUser.username != profile.username" id="follow" @click="followProfile(username)" class="heart-button" :class="{active : isFollowing}">
           <div class="heart-flip"></div>
           <span>follow<span>ed</span></span>
         </button>
+    <!-- </div> -->
     </div>
     <div>
       <span>{{ likeCount }} movie &nbsp;</span>
@@ -16,17 +19,27 @@
       <div class="black-bg" v-if="openModal == true" @click="close($event)">
         <div class="white-bg">
             <h4>팔로우/팔로잉 목록</h4>
+          <div class="container">
+            <div class="column">
             <p>팔로우 목록</p>
-            <span v-for="followers in profile.followers" :key="followers"><a :href="`http://localhost:8080/profile/${ Users[followers-1].username }`">{{Users[followers-1].username}}</a></span>
+            <!-- <span v-for="followers in profile.followers" :key="followers"><a :href="`http://localhost:8080/profile/${ Users[followers-1].username }`">{{Users[followers-1].username}}</a></span> -->
+            <span v-for="followers in profile.followers" :key="followers"><router-link :to="{ name: 'profile', params: {username: Users[followers-1].username }}">{{Users[followers-1].username}}<br></router-link></span>
+            </div>
+            <div class="column">
             <p>팔로잉 목록</p>
-            <span v-for="following in profile.followings" :key="following"><a :href="`http://localhost:8080/profile/${ Users[following-1].username }`">{{Users[following-1].username}}</a><br></span>
+            <!-- <span v-for="following in profile.followings" :key="following"><a :href="`http://localhost:8080/profile/${ Users[following-1].username }`">{{Users[following-1].username}}</a><br></span> -->
+            <span v-for="following in profile.followings" :key="following"><router-link :to="{ name: 'profile', params: {username: Users[following-1].username }}">{{Users[following-1].username}}<br></router-link></span>
+            </div>
+          </div>
             <button class="close">닫기</button>
         </div>
       </div>
-      <h5 @click="openModal = true">팔로우/팔로잉 목록</h5>
+      <br>
+      <button class="btn btn-success" @click="openModal = true">팔로우/팔로잉 목록</button>
       
 
     </div>
+  </div>  
   </div>
 </template>
 
@@ -86,6 +99,16 @@ export default {
     font-family: 'Noto Sans KR',  sans-serif;
     font-weight: 500;
   }
+
+  .container {
+  display: flex;
+}
+
+.column {
+  flex-basis: 50%;
+  padding: 20px;
+}
+
 
   span {
     font-family: 'Noto Sans KR',  sans-serif;
@@ -264,7 +287,7 @@ export default {
 }
 
 .white-bg {
-	width: 90%;
+	width: 50%;
 	margin: 80px auto;
 	background: white;
 	border-radius: 5px;

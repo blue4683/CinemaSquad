@@ -32,7 +32,6 @@ export default {
     // signup & login -> 완료하면 토큰 발급
     SAVE_TOKEN(state, token) {
       state.token = token;
-      console.log(state.token)
       // router.push({name : 'home'}) // store/index.js $router 접근 불가 -> import를 해야함
     },
     CHANGE_USERNAME(state, username) {
@@ -121,7 +120,6 @@ export default {
         headers: getters.authHeader,
       })
         .then((res) => {
-          console.log(res);
           commit("SET_PROFILE", res.data);
         })
         .catch((err) => {
