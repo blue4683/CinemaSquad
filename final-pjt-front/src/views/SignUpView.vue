@@ -4,15 +4,15 @@
     <div class="container">
     <form @submit.prevent="signUp(credentials)">
       <div class="input-box">
-      <input type="text" id="username" v-model="credentials.username"><br>
+      <input type="text" id="username" v-model="credentials.username" placeholder="아이디">
       <label for="username">아이디</label>
       </div>
       <div class="input-box">
-      <input type="password" id="password1" v-model="credentials.password1"><br>
+      <input type="password" id="password1" v-model="credentials.password1" placeholder="비밀번호">
       <label for="password1">비밀번호</label>
       </div>
       <div class="input-box">
-      <input type="password" id="password2" v-model="credentials.password2">
+      <input type="password" id="password2" v-model="credentials.password2" placeholder="비밀번호 확인">
       <label for="password2">비밀번호 확인</label>
       </div>
       <input type="submit" value="SignUp">
