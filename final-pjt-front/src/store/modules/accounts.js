@@ -120,7 +120,6 @@ export default {
         headers: getters.authHeader,
       })
         .then((res) => {
-          console.log(res);
           commit("SET_PROFILE", res.data);
         })
         .catch((err) => {

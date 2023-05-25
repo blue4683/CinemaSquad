@@ -4,7 +4,7 @@
       <star-rating :inline="true" :increment="0.5" :show-rating="false" v-model="user_rate" v-bind:star-size="30" class="me-2"></star-rating>
       <label for="content" class="my-auto me-3">내용 : </label>
       <input id="text" class="me-2" cols="30" rows="1" v-model="content">
-      <input type="submit" id="submit">
+      <input type="submit" id="submit" value="SUBMIT" class="btn btn-primary" style="font-size: 14px; line-height: 1.6; font-weight: 600;">
     </form>
   </div>
 </template>

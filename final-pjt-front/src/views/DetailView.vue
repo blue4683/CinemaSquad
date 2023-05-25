@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <div class="w-75 container justify-content-center row d-inline-flex my-4">
+    <div class="comment-container my-4">
       <CommentListItem v-for="comment in comments" :key="comment.key" :comment="comment" />
     </div>
     <br>
@@ -115,6 +115,14 @@ export default {
 </script>
 
 <style scoped>
+.comment-container {
+  margin-left:15%;
+  margin-right:15%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 40px;
+}
+
   .detail-content {
     text-align: start;
   }
