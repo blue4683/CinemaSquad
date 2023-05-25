@@ -2,22 +2,24 @@
   <div id="detail">
     <div class="d-flex w-75 container justify-content-center">
       <img v-if="movie" :src="image(movie.poster_path)" class="card-img-top w-25 mx-5" alt="...">
-      <div class="detail-content d-inline-block">
-        <h2>{{ movie?.title }}</h2>
-        <p>내용 : {{ movie?.overview }}</p>
-        <p>개봉일 : {{ movie?.release_date }}</p>
-        <p>평점 : {{ movie?.vote_average }}</p>
-        <p>장르 : {{movie_genres}}</p>
-        <p>관심수 : {{ movie?.like_users.length }}</p>
-        <!-- <button @click="likeMovie">좋아요</button> -->
-        <button id="follow" @click="likeMovie" class="heart-button" :class="{active : movie.like_users.includes(currentUser.pk)}">
-            <div class="heart-flip"></div>
-            <span>Like<span>d</span></span>
-        </button>
+      <div class="detail-content d-inline-block py-auto">
+        <h1 class="fw-bold">{{ movie?.title }}</h1>
+        <p>{{ movie?.release_date.split('-')[0] }}・{{movie_genres}}</p>
+        <p>{{ movie?.overview }}</p>
+        <p><span style="color: #ffc107;">&bigstar;</span> {{ movie?.vote_average }} ({{ movie?.vote_count }}명)</p>
+        <div class="d-inline-flex py-auto">
+          <p class="my-auto">관심수 : {{ movie?.like_users.length }}</p>
+          <button id="follow" @click="likeMovie" class="heart-button my-auto mx-4" :class="{active : movie.like_users.includes(currentUser.pk)}">
+              <div class="heart-flip"></div>
+              <span>Like<span>d</span></span>
+          </button>
+        </div>
+        <div>
+          <CommentForm/>
+        </div>
       </div>
     </div>
-    <div class="w-75 container justify-content-center">
-      <CommentForm />
+    <div class="comment-container my-4">
       <CommentListItem v-for="comment in comments" :key="comment.key" :comment="comment" />
     </div>
     <br>
@@ -32,7 +34,11 @@
       </div>
     </div>
     <div v-else>
-      <h2>로그인이 필요한 기능입니다.</h2>
+      <router-link :to="{
+        name: 'LogInView',
+      }">
+        <h2>영화를 추천받고 싶다면 로그인을 해주세요</h2>
+      </router-link>
     </div>
   </div>
 </template>
@@ -81,7 +87,7 @@ export default {
             arr.push(genre.name)
           }
       }
-      return arr.join(', ')
+      return arr.join('・')
     },
     genres() {
       return this.$store.state.genres
@@ -97,13 +103,26 @@ export default {
       return `${IMG_URL}${imgSrc}`
     },
     likeMovie() {
-      this.$store.dispatch('likeMovie', this.movie.id)
+      if (this.isLogin) {
+        this.$store.dispatch('likeMovie', this.movie.id)
+      }
+      else {
+        this.$router.push({name:'LogInView'})
+      }
     },
   },
 }
 </script>
 
 <style scoped>
+.comment-container {
+  margin-left:15%;
+  margin-right:15%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 40px;
+}
+
   .detail-content {
     text-align: start;
   }
@@ -116,6 +135,9 @@ export default {
     font-size: 0.9rem;
   }
 
+  p {
+    font-size: 20px;
+  }
 
   .heart,
   .heart-button {
