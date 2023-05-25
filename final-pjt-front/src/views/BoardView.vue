@@ -115,6 +115,10 @@ table tr td {
   width: 5rem;
   height: 2rem;
   letter-spacing: 0.5px;
+  background-color: #339157;
+  color:white;
+  border-radius: 5px;
+  font-size: 13pt;
 }
 .btn-cover .page-count {
   padding: 0 1rem;
