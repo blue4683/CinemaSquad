@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div id="movie_logo" class="m-5"> 영화들 </div>
+    <h2 class="my-5 fw-bold">관심 영화</h2>
     <div class="d-flex row">
       <ProfileMovieItem v-for="movie in likeMovies"
       :movie="movie"
