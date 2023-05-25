@@ -11,6 +11,7 @@
         <input id="password" type="password" name="password" v-model="password" placeholder="비밀번호">
         <label for="password">비밀번호</label>
       </div>
+      <div id="forgot"><router-link :to="{name:'SignUpView'}">SignUp</router-link></div>
       <input type="submit" value="Login">
     </form>
     </div>
@@ -95,5 +96,11 @@ input:focus, input:not(:placeholder-shown){
                 height:35px;
                 font-size: 14pt;
                 margin-top:30px;
+            }
+#forgot{
+                text-align: right;
+                font-size:12pt;
+                color:rgb(164, 164, 164);
+                margin:10px 0px;
             }
 </style>
