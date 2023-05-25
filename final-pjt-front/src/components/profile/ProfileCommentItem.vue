@@ -1,6 +1,6 @@
 <template>
   <div id="comment" class="col-3 ml-auto rounded-3 border border-2">
-    <div v-if="!isUpdated" class="container mt-3">
+    <div class="container mt-3">
       <div v-show="isLogin" class=" d-flex justify-content-between mx-2 container">
         <p class="fw-bold">
           <router-link
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
   name: 'ProfileCommentItem',
   props: {
@@ -32,8 +34,9 @@ export default {
   computed : {
     movies(){
         return this.$store.state.movies
-    }
-  }
+    },
+    ...mapGetters(['isLogin'])
+  },
 }
 </script>
 

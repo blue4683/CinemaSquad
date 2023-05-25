@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="py-3">
     <h1>Movie Page</h1>
-    <select v-model="selection" @change="selectGenre(selection)">
+    <select class="my-4" v-model="selection" @change="selectGenre(selection)">
         <option value="total" selected="selected">전체</option>
         <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}</option>
     </select>
@@ -115,8 +115,6 @@ table tr td {
   width: 5rem;
   height: 2rem;
   letter-spacing: 0.5px;
-  background-color: #339157;
-  color:white;
   border-radius: 5px;
   font-size: 13pt;
 }

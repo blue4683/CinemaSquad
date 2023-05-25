@@ -19,9 +19,12 @@
         </div>
       </div>
     </div>
-    <div class="comment-container my-4">
-      <CommentListItem v-for="comment in comments" :key="comment.key" :comment="comment" />
-    </div>
+    <details class="my-3">
+      <summary class="fw-bold fs-5">댓글 보기</summary>
+      <div class="comment-container my-4">
+        <CommentListItem v-for="comment in comments" :key="comment.key" :comment="comment" />
+      </div>
+    </details>
     <br>
     <div v-if="isLogin">
       <h2>이 영화와 비슷한 추천 영화</h2>

@@ -60,7 +60,14 @@ export default new Vuex.Store({
       state.comments = comments
     },
     GET_TREND_MOVIES(state, movies) {
-      state.trendMovies = movies.slice(0, 6)
+      const movieList = []
+      for (const movie of movies) {
+        const filteredMovie = state.movies.filter((ele) => {
+          return ele.movie_id === movie.id
+        })
+        movieList.push(filteredMovie[0])
+      }
+      state.trendMovies = movieList.slice(0, 6)
     },
     GET_GENRES(state, genres) {
       state.genres = genres

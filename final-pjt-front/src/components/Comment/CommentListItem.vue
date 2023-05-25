@@ -1,6 +1,6 @@
 <template>
   <div id="comment" class="col-3 ml-auto rounded-3 border border-2">
-    <div v-if="!isUpdated" class="container mt-3">
+    <div class="container mt-3">
       <div v-show="isLogin" class=" d-flex justify-content-between mx-2 container">
         <p v-show="isLogin"><router-link :to="{ name: 'profile', params: {username: comment.user.username }}">{{comment.user.username}}</router-link></p>
         <p v-show="!isLogin"><router-link :to="{ name: 'LogInView', params: {username: comment.user.username }}">{{comment.user.username}}</router-link></p>
@@ -8,10 +8,15 @@
       </div>
       <hr>
       <div class="container">
-        <p>{{ comment.content }}</p>
+        <p v-if="!isUpdated">{{ comment.content }}</p>
+        <form v-if="isUpdated" @submit.prevent="updateComment">
+          <label for="content">수정 내용 : </label>
+          <textarea id="content" cols="30" rows="1" v-model="content"></textarea>
+          <input type="submit" id="submit" class="btn btn-success me-2" value="UPDATE">
+        </form>
       </div>
       <hr>
-      <div class="container d-flex justify-content-between mb-2">
+      <div v-if="!isUpdated" class="container d-flex justify-content-between mb-2">
         <p class="my-auto"><span style="color: #ea4673;">&hearts;</span>  {{comment.like_users.length}}</p>
         <button v-if="comment.user.username != currentUser.username" @click="likeComment" id="follow" class="heart-button" :class="{active:comment.like_users.includes(currentUser.pk)}">
           <div class="heart-flip"></div>
@@ -23,11 +28,6 @@
         </div>
       </div>
     </div>
-    <form v-if="isUpdated" @submit.prevent="updateComment">
-      <label for="content">수정 내용 : </label>
-      <textarea id="content" cols="30" rows="1" v-model="content"></textarea>
-      <input type="submit" id="submit" class="btn btn-success me-2" value="UPDATE">
-    </form>
   </div>
 </template>
 
@@ -44,6 +44,9 @@ export default {
   },
   props: {
       comment: Object,
+  },
+  created() {
+    this.content = this.comment.content
   },
   computed: {
     ...mapGetters(['currentUser', 'isLogin'])
@@ -68,7 +71,6 @@ export default {
         content: this.content
       }
       this.$store.dispatch('updateComment', data)
-      this.content = null
       this.updateState()
     },
     deleteComment() {
